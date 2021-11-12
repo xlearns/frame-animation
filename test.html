@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    canvas{
+      background-color: black;
+    }
+  </style>
+</head>
+<body>
+  <canvas class="ctx" width='800' height='600'></canvas>
+  <script src='./res/sm_body80200/_.js'></script>
+  <script>
+    let canvas = document.querySelector('.ctx')
+    let ctx = canvas.getContext('2d')
+    let length = 210
+    let offset = m_offset['sm_body80200']
+    let map = []
+    let pointer = {
+      x:100,
+      y:100
+    }
+    function init(){
+      Array.from({length:length}).forEach((undefined,index)=>{
+        map[index] = new Image()
+        map[index].src = `./res/sm_body80200/${index}.png`
+        map[index].onload = function(){
+          if(index>=length-1){
+          //开始
+            window.requestAnimationFrame(start)
+          }
+        } 
+      })
+    }
+    function start(){
+      animate(map,0,10,300)
+    }
+    function setCenterPointer(x,y){
+      pointer.x = x
+      pointer.y = y
+    }
+    function animate(obj,start,end,speed=60,x=0,y=0,w,h){
+      timer = setTimeout(()=>{
+        if(++start>end){
+          return clearTimeout(timer)
+        }
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.drawImage(obj[start],pointer.x+x,pointer.y+y)
+        ctx.restore();
+        animate(obj,start,end,speed,x,y,w,h)
+      },speed)
+    }
+    init()
+  </script>
+</body> 
+</html>
